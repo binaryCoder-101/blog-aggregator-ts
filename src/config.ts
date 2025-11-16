@@ -37,7 +37,7 @@ function validateConfig(rawConfig: any): Config {
 }
 
 function getConfigFilePath(): string {
-  const configFilename = ".gatorconfigts.json";
+  const configFilename = ".gatorconfig.json";
   const homeDir = os.homedir();
   const configFilePath = path.join(homeDir, configFilename);
   return configFilePath;
