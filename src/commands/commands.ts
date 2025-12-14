@@ -1,24 +1,24 @@
 import { setUser } from "src/config.js";
 
-type commandHandler = (cmdname: string, ...args: string[]) => void;
+type commandHandler = (cmdname: string, ...args: string[]) => Promise<void>;
 
 export type commandsRegistry = {
   [key: string]: commandHandler;
 };
 
-export function registerCommand(
+export async function registerCommand(
   registry: commandsRegistry,
   cmdName: string,
   handler: commandHandler
-): void {
+): Promise<void> {
   registry[cmdName] = handler;
 }
 
-export function runCommand(
+export async function runCommand(
   registry: commandsRegistry,
   cmdName: string,
   ...args: string[]
-): void {
+): Promise<void> {
   const handler = registry[cmdName];
 
   if (!handler) {
