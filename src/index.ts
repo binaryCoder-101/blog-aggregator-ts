@@ -4,10 +4,11 @@ import {
   registerCommand,
   runCommand,
 } from "./commands/commands.js";
-import { handlerLogin } from "./commands/users.js";
+import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users.js";
 import { exit } from "process";
+import { handlerAggregate } from "./commands/aggregate.js";
 
-function main() {
+async function main() {
   // console.log("login misaque");
   // setUser("Misaque");
   // const result = readConfig();
@@ -15,14 +16,18 @@ function main() {
   // const username = "Misaque";
   const registry: commandsRegistry = {};
 
-  registerCommand(registry, "login", handlerLogin);
+  await registerCommand(registry, "login", handlerLogin);
+  await registerCommand(registry, "register", handlerRegister);
+  await registerCommand(registry, "reset", handlerReset);
+  await registerCommand(registry, "users", handlerUsers);
+  await registerCommand(registry, "agg", handlerAggregate)
 
   const prompt = process.argv.slice(2);
   const commandName = prompt[0];
   const commandArgs = prompt.slice(1);
 
   try {
-    runCommand(registry, commandName, ...commandArgs);
+    await runCommand(registry, commandName, ...commandArgs);
   } catch (err) {
     if (err instanceof Error) {
       console.error(`Error running command: ${err.message}`);
@@ -31,6 +36,8 @@ function main() {
     }
     process.exit(1);
   }
+
+  process.exit(0);
 }
 
 main();
