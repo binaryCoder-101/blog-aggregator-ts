@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm"
 import { db } from "..";
 import { feeds } from "../schema";
 
@@ -11,5 +12,10 @@ export async function createFeed(name: string, url: string, userId: string) {
         })
         .returning();
         
+    return result;
+}
+
+export async function getFeeds() {
+    const result = await db.select().from(feeds);
     return result;
 }

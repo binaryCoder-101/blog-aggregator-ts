@@ -1,6 +1,6 @@
 import { readConfig, setUser } from "src/config.js";
 import { createUser, deleteUsers, getUsers } from "src/lib/db/queries/users";
-import { getUser } from "src/lib/db/queries/users";
+import { getUserByName } from "src/lib/db/queries/users";
 
 export async function handlerLogin(cmdName: string, ...args: string[]): Promise<void> {
   if (args.length !== 1) {
@@ -8,7 +8,7 @@ export async function handlerLogin(cmdName: string, ...args: string[]): Promise<
   }
 
   const userName = args[0];
-  const userDetails = await getUser(userName);
+  const userDetails = await getUserByName(userName);
   if (!userDetails) {
     throw new Error(`User Doesn't exist!`);
   }
@@ -24,7 +24,7 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
 
   const userName = args[0];
 
-  if(await getUser(userName)) {
+  if(await getUserByName(userName)) {
     throw new Error(`user already exist!`);
   }
 
