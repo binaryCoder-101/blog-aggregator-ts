@@ -7,14 +7,13 @@ export async function handlerLogin(cmdName: string, ...args: string[]): Promise<
     throw new Error(`usage: ${cmdName} <name>`);
   }
 
-  const user = args[0];
-
-  const userDetails = await getUser(user);
+  const userName = args[0];
+  const userDetails = await getUser(userName);
   if (!userDetails) {
     throw new Error(`User Doesn't exist!`);
   }
 
-  setUser(user);
+  setUser(userName);
   console.log("User logged in successfully!");
 }
 
@@ -23,16 +22,18 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     throw new Error(`usage: ${cmdName} <name>`);
   }
 
-  const name = args[0];
+  const userName = args[0];
 
-  if(await getUser(name)) {
+  if(await getUser(userName)) {
     throw new Error(`user already exist!`);
   }
 
-  const user = await createUser(name);
+  const user = await createUser(userName);
+  if (!user) {
+    throw new Error(`User not found!`);
+  }
   
   setUser(user.name);
-
   console.log("User created successfully!");
   console.log(user);
 }
