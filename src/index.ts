@@ -6,6 +6,7 @@ import {
 import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users.js";
 import { handlerAggregate } from "./commands/aggregate.js";
 import { handlerAddFeed, handlerFeeds } from "./commands/feeds.js";
+import { handlerAddFeedFollow, handlerGetFeedFollowsForUser } from "./commands/feed_follows.js";
 
 async function main() {
   // console.log("login misaque");
@@ -22,6 +23,8 @@ async function main() {
   await registerCommand(registry, "agg", handlerAggregate);
   await registerCommand(registry, "addfeed", handlerAddFeed);
   await registerCommand(registry, "feeds", handlerFeeds);
+  await registerCommand(registry, "follow", handlerAddFeedFollow);
+  await registerCommand(registry, "following", handlerGetFeedFollowsForUser);
 
   const prompt = process.argv.slice(2);
   const commandName = prompt[0];

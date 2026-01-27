@@ -29,6 +29,13 @@
       "when": 1768109977570,
       "tag": "0003_rare_tombstone",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1768285202747,
+      "tag": "0004_tired_karma",
+      "breakpoints": true
     }
   ]
 }
