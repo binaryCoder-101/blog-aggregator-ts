@@ -7,9 +7,10 @@ import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./com
 import { handlerAggregate } from "./commands/aggregate.js";
 import { handlerAddFeed, handlerFeeds } from "./commands/feeds.js";
 import { handlerAddFeedFollow, handlerGetFeedFollowsForUser } from "./commands/feed_follows.js";
+import { middlewareLoggedIn } from "./middleware.js";
 
 async function main() {
-  // console.log("login misaque");
+  // console.log("login misaque");  
   // setUser("Misaque");
   // const result = readConfig();
   // console.log(result);
@@ -21,10 +22,10 @@ async function main() {
   await registerCommand(registry, "reset", handlerReset);
   await registerCommand(registry, "users", handlerUsers);
   await registerCommand(registry, "agg", handlerAggregate);
-  await registerCommand(registry, "addfeed", handlerAddFeed);
+  await registerCommand(registry, "addfeed", middlewareLoggedIn(handlerAddFeed));
   await registerCommand(registry, "feeds", handlerFeeds);
-  await registerCommand(registry, "follow", handlerAddFeedFollow);
-  await registerCommand(registry, "following", handlerGetFeedFollowsForUser);
+  await registerCommand(registry, "follow", middlewareLoggedIn(handlerAddFeedFollow));
+  await registerCommand(registry, "following", middlewareLoggedIn(handlerGetFeedFollowsForUser));
 
   const prompt = process.argv.slice(2);
   const commandName = prompt[0];

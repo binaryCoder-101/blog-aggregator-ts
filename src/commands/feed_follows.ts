@@ -1,21 +1,14 @@
-import { readConfig } from "src/config";
 import {
   createFeedFollow,
   getFeedFollowsForUser,
 } from "src/lib/db/queries/feed_follows";
 import { getFeedByURL } from "src/lib/db/queries/feeds";
-import { getUserByName } from "src/lib/db/queries/users";
+import { User } from "src/lib/db/schema";
 
-export async function handlerAddFeedFollow(cmdName: string, ...args: string[]) {
+// this one
+export async function handlerAddFeedFollow(cmdName: string, user: User, ...args: string[]) {
   if (args.length !== 1) {
     throw new Error(`usage: ${cmdName} <url>`);
-  }
-
-  const currentUserName = readConfig().currentUserName;
-
-  const currentUserDetails = await getUserByName(currentUserName);
-  if (!currentUserDetails) {
-    throw new Error(`User ${currentUserName} not found`);
   }
 
   const url = args[0];
@@ -24,33 +17,24 @@ export async function handlerAddFeedFollow(cmdName: string, ...args: string[]) {
     throw new Error(`Feed not found: ${url}`);
   }
 
-  const result = await createFeedFollow(currentUserDetails.id, feedDetails.id);
+  const result = await createFeedFollow(user.id, feedDetails.id);
 
   printFeedFollow(result.userName, result.feedName);
 }
 
-export async function handlerGetFeedFollowsForUser(
-  cmdName: string,
-  ...args: string[]
-) {
+// aaand this one
+export async function handlerGetFeedFollowsForUser(cmdName: string, user: User, ...args: string[]) {
   if (args.length !== 0) {
     throw new Error(`usage: ${cmdName}`);
   }
 
-  const currentUserName = readConfig().currentUserName;
-
-  const currentUserDetails = await getUserByName(currentUserName);
-  if (!currentUserDetails) {
-    throw new Error(`User ${currentUserName} not found`);
-  }
-
-  const result = await getFeedFollowsForUser(currentUserDetails.id);
+  const result = await getFeedFollowsForUser(user.id);
   if (result.length === 0) {
     console.log(`No feed follows found for this user.`);
     return;
   }
 
-  console.log(`Feeds folowed by ${currentUserName}: `);
+  console.log(`Feeds folowed by ${user.name}: `);
   for (let feedFollow of result) {
     console.log(`${feedFollow.feedName}`);
   }

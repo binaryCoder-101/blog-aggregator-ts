@@ -1,15 +1,24 @@
-import { setUser } from "src/config.js";
+import { User } from "src/lib/db/schema";
 
-type commandHandler = (cmdname: string, ...args: string[]) => Promise<void>;
+export type CommandHandler = (
+  cmdname: string,
+  ...args: string[]
+) => Promise<void>;
+
+export type UserCommandHandler = (
+  cmdName: string,
+  user: User,
+  ...args: string[]
+) => Promise<void>;
 
 export type commandsRegistry = {
-  [key: string]: commandHandler;
+  [key: string]: CommandHandler;
 };
 
 export async function registerCommand(
   registry: commandsRegistry,
   cmdName: string,
-  handler: commandHandler
+  handler: CommandHandler,
 ): Promise<void> {
   registry[cmdName] = handler;
 }
@@ -27,4 +36,3 @@ export async function runCommand(
 
   await handler(cmdName, ...args);
 }
-
